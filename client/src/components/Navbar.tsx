@@ -1,4 +1,5 @@
 import Logo from "../assets/Logo.png";
+import WalletModal from "./WalletModal";
 const Navbar = () => {
 	return (
 		<nav className="flex justify-around mt-3">
@@ -17,9 +18,7 @@ const Navbar = () => {
 					<a href="#features">Features</a>
 				</div>
 			</div>
-			<button className="bg-blue-800 hover:bg-blue-500 px-3 rounded-xl hover:cursor-pointer">
-				Connect Wallet
-			</button>
+			<WalletModal/>
 		</nav>
 	);
 };
