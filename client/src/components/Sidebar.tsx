@@ -7,7 +7,7 @@ import LogoutIcon from "../assets/LogoutIcon.png";
 
 const Sidebar = () => {
 	return (
-		<div className="w-1/6 mt-1 h-[calc(100vh-4rem)] pt-5  flex flex-col gap-6   bg-blue-950">
+		<div className="w-1/6 mt-3 h-[calc(100vh-4rem)] pt-5  flex flex-col gap-6   bg-blue-950">
 			<div className="rounded-md bg-blue-900  hover:bg-blue-800 hover:cursor-pointer flex gap-4 items-center text-white mx-3 px-4 py-2 text-center">
 				<img src={DashboardIcon} />
 				<p>Dashboard</p>

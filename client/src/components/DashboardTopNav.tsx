@@ -3,7 +3,7 @@ import Avatar from "../assets/Avatar.png";
 
 const DashboardTopNav = () => {
 	return (
-		<div className="flex justify-around mt-3">
+		<div className="flex justify-between px-4  mt-3">
 			<div className="flex flex-row items-center gap-2">
 				<img className="h-10" src={Logo} alt="Logo" />
 				<h1>FOSS DAO</h1>
