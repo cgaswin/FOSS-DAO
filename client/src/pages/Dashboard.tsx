@@ -1,7 +1,8 @@
+import DashboardTopNav from "@/components/DashboardTopNav"
 
 const Dashboard = () => {
   return (
-    <div>Dashboard</div>
+    <div><DashboardTopNav/></div>
   )
 }
 
