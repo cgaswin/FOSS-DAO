@@ -4,6 +4,7 @@ import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import Error from "./pages/Error";
 import Proposal from "./pages/Proposal";
+import Overview from "./pages/Overview";
 
 const router = createBrowserRouter([
 	{
@@ -20,6 +21,9 @@ const router = createBrowserRouter([
   }, {
     path: "/proposal/create",
     element: <Proposal/>
+  }, {
+    path: "/overview",
+    element: <Overview/>
   }
 ]);
 
