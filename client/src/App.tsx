@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import Error from "./pages/Error";
+import Proposal from "./pages/Proposal";
 
 const router = createBrowserRouter([
 	{
@@ -16,6 +17,9 @@ const router = createBrowserRouter([
   }, {
     path: "/profile",
     element: <Profile/>
+  }, {
+    path: "/proposal/create",
+    element: <Proposal/>
   }
 ]);
 
