@@ -5,6 +5,7 @@ import Profile from "./pages/Profile";
 import Error from "./pages/Error";
 import Proposal from "./pages/Proposal";
 import Overview from "./pages/Overview";
+import Forum from "./pages/Forum";
 
 const router = createBrowserRouter([
 	{
@@ -24,6 +25,9 @@ const router = createBrowserRouter([
   }, {
     path: "/overview",
     element: <Overview/>
+  }, {
+    path: "/forum",
+    element:<Forum/>
   }
 ]);
 
