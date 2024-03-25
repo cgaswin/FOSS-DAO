@@ -1,5 +1,6 @@
 import DashboardTopNav from "@/components/DashboardTopNav";
 import Sidebar from "@/components/Sidebar";
+import GithubLogo from "../assets/github-mark-white.png";
 
 const Profile = () => {
 	return (
@@ -49,10 +50,19 @@ const Profile = () => {
 														type="text"
 														name="githubId"
 														id="githubId"
+														disabled
 														placeholder="Github ID"
 														className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-white placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
 													/>
 												</div>
+											</div>
+											<div className="flex gap-2 w-max bg-gray-950 rounded-md px-4 py-2 mt-2">
+												<img
+													src={GithubLogo}
+													className="w-10"
+													alt="github-logo"
+												/>
+												<button>Connect Github</button>
 											</div>
 										</div>
 									</div>

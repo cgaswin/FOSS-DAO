@@ -1,5 +1,5 @@
 import DashboardIcon from "../assets/dashboardIcon.png";
-import DepositIcon from "../assets/DepositIcon.png";
+// import DepositIcon from "../assets/DepositIcon.png";
 import ForumIcon from "../assets/ForumIcon.png";
 import OverviewIcon from "../assets/OverviewIcon.png";
 import ProfileIcon from "../assets/ProfileIcon.png";
