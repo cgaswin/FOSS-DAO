@@ -1,4 +1,6 @@
 import AvatarIcon from "../assets/Avatar.png";
+import { ProgressNegative } from "./ProgressNegative";
+import { ProgressPositive } from "./ProgressPositive";
 const ProposalCard = () => {
 	return (
 		<div className="bg-blue-900 w-full rounded-md px-4 py-2 h-full">
@@ -15,10 +17,10 @@ const ProposalCard = () => {
 				repudiandae, obcaecati voluptas incidunt reprehenderit adipisci quod
 				assumenda distinctio doloribus qui!
 			</p>
-			<div className="flex justify-between">
+			<div className="flex">
 				<p>8 days left</p>
-				<div className="bg-green-300 rounded-full w-32"></div>
-				<div className="bg-red-300 rounded-full w-32"></div>
+				<ProgressPositive value={80} />
+				<ProgressNegative value={20} />
 			</div>
 		</div>
 	);
