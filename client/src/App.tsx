@@ -7,6 +7,7 @@ import Proposal from "./pages/Proposal";
 import Overview from "./pages/Overview";
 import Forum from "./pages/Forum";
 import ProposalDetail from "./pages/ProposalDetail";
+import NewThread from "./pages/NewThread";
 
 const router = createBrowserRouter([
 	{
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
 	{
 		path: "/forum",
 		element: <Forum />,
+	},
+	{
+		path: "/thread/:threadId",
+		element: <NewThread/>
 	},
 ]);
 

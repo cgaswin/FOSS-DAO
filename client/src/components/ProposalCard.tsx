@@ -17,7 +17,7 @@ const ProposalCard = () => {
 				repudiandae, obcaecati voluptas incidunt reprehenderit adipisci quod
 				assumenda distinctio doloribus qui!
 			</p>
-			<div className="flex">
+			<div className="flex gap-6 mt-1">
 				<p>8 days left</p>
 				<ProgressPositive value={80} />
 				<ProgressNegative value={20} />
