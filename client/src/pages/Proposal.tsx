@@ -1,9 +1,34 @@
 import DashboardTopNav from "@/components/DashboardTopNav";
 import Sidebar from "@/components/Sidebar";
+import { Button } from "@/components/ui/button";
 
-import { PhotoIcon } from "@heroicons/react/24/solid";
+import { useState } from "react";
 
 const Proposal = () => {
+	const [formData, setFormData] = useState({
+		title: "",
+		description: "",
+		image: null,
+		projectLink: "",
+		requiredFund: 0,
+	});
+
+	const handleChange = (
+		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+	) => {
+		const { name, value } = e.target;
+		setFormData((prevState) => ({ ...prevState, [name]: value }));
+	};
+
+	const handleSubmit = (e: React.FormEvent) => {
+		e.preventDefault();
+		if (isNaN(formData.requiredFund) || formData.requiredFund < 0) {
+			alert("Required fund must be a positive number");
+			return;
+		}
+
+		console.log(formData);
+	};
 	return (
 		<div className="h-screen overflow-hidden">
 			<DashboardTopNav />
@@ -13,8 +38,8 @@ const Proposal = () => {
 					<div className="">
 						<h1>Create Proposal</h1>
 					</div>
-					<div className="bg-blue-950  px-10 mb-10 py-10">
-						<h1>Proposal Description</h1>
+					<div className="bg-blue-950 rounded-md  px-20 mb-10 py-5">
+						<h1>Proposal Details</h1>
 						<form className="flex ">
 							<div className="space-y-12">
 								<div className="border-b border-gray-900/10 pb-12">
@@ -32,6 +57,8 @@ const Proposal = () => {
 														type="text"
 														name="title"
 														id="title"
+														value={formData.title}
+														onChange={handleChange}
 														className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-white placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
 														placeholder="Project Title"
 													/>
@@ -50,47 +77,16 @@ const Proposal = () => {
 												<textarea
 													id="description"
 													name="description"
+													onChange={handleChange}
+													value={formData.description}
 													rows={3}
-													className="block w-full rounded-md border-0 py-1.5 text-white shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+													placeholder="Enter description of the project"
+													className="block bg-blue-950 px-4  w-full rounded-md border-0 py-1.5 text-white shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 													defaultValue={""}
 												/>
 											</div>
 										</div>
 
-										<div className="col-span-full px-10 py-4 border-dashed border-[1px] ">
-											<label
-												htmlFor="cover-photo"
-												className="block text-sm font-medium leading-6 text-white"
-											>
-												Upload Image
-											</label>
-											<div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-												<div className="text-center">
-													<PhotoIcon
-														className="mx-auto h-12 w-12 text-gray-300"
-														aria-hidden="true"
-													/>
-													<div className="mt-4 flex text-sm leading-6 text-white-600">
-														<label
-															htmlFor="file-upload"
-															className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
-														>
-															<span>Upload a file</span>
-															<input
-																id="file-upload"
-																name="file-upload"
-																type="file"
-																className="sr-only"
-															/>
-														</label>
-														<p className="pl-1">or drag and drop</p>
-													</div>
-													<p className="text-xs leading-5 text-white">
-														PNG, JPG, GIF up to 10MB
-													</p>
-												</div>
-											</div>
-										</div>
 										<div className="sm:col-span-4">
 											<label
 												htmlFor="username"
@@ -103,6 +99,8 @@ const Proposal = () => {
 													<input
 														type="text"
 														name="projectLink"
+														value={formData.projectLink}
+														onChange={handleChange}
 														id="projectLink"
 														autoComplete="projectLink"
 														className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-white placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
@@ -122,7 +120,9 @@ const Proposal = () => {
 												<div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
 													<input
 														type="text"
-														name="fund"
+														name="requiredFund"
+														value={formData.requiredFund}
+														onChange={handleChange}
 														id="fund"
 														autoComplete="fund"
 														className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-white placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
@@ -131,6 +131,9 @@ const Proposal = () => {
 											</div>
 										</div>
 									</div>
+									<Button className="mt-4" onClick={handleSubmit}>
+										Submit
+									</Button>
 								</div>
 							</div>
 						</form>
