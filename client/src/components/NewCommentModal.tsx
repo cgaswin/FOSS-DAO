@@ -7,7 +7,6 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
 
 export default function NewCommentModal() {
