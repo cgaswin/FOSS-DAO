@@ -2,8 +2,12 @@ import DashboardTopNav from "@/components/DashboardTopNav";
 import ProposalCard from "@/components/ProposalCard";
 import Sidebar from "@/components/Sidebar";
 import { PlusIcon } from "lucide-react";
+import { useAccount } from "wagmi";
 
 const Dashboard = () => {
+	const { address } = useAccount();
+	console.log(address)
+
 	return (
 		<div>
 			<DashboardTopNav />
