@@ -6,8 +6,11 @@ import {
 	DialogTrigger,
 } from "@/components/ui/dialog";
 import MetamaskImage from "../assets/metamask.png";
+import { useConnect } from "wagmi";
 
 export default function WalletModal() {
+	const { connectors, connect } = useConnect();
+	const actualConnector = connectors[0];
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
@@ -20,9 +23,12 @@ export default function WalletModal() {
 					<DialogTitle>Connect Wallet</DialogTitle>
 				</DialogHeader>
 				<div className="flex flex-col">
-					<div className="bg-blue-950 hover:bg-slate-900 hover:cursor-pointer flex items-center gap-4 p-5 m-10 rounded-md">
+					<div
+						onClick={() => connect({ connector: actualConnector })}
+						className="bg-blue-950 hover:bg-slate-900 hover:cursor-pointer flex items-center gap-4 p-5 m-10 rounded-md"
+					>
 						<img src={MetamaskImage} alt="metamask logo" />
-						<p className="text-xl">Metamask</p>
+						<p className="text-xl">{actualConnector.name}</p>
 					</div>
 				</div>
 			</DialogContent>

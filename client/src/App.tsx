@@ -1,4 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { WagmiProvider } from "wagmi";
+import { config } from "../config";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
@@ -9,6 +12,7 @@ import Forum from "./pages/Forum";
 import ProposalDetail from "./pages/ProposalDetail";
 import NewThread from "./pages/NewThread";
 import Thread from "./pages/Thread";
+import Deposit from "./pages/Deposit";
 
 const router = createBrowserRouter([
 	{
@@ -42,16 +46,28 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/thread/create",
-		element: <NewThread/>
+		element: <NewThread />,
 	},
 	{
 		path: "/thread/:id",
-		element: <Thread/>
-	}
+		element: <Thread />,
+	},
+	{
+		path: "/deposit",
+		element: <Deposit />,
+	},
 ]);
 
+const queryClient = new QueryClient();
+
 const App = () => {
-	return <RouterProvider router={router} />;
+	return (
+		<WagmiProvider config={config}>
+			<QueryClientProvider client={queryClient}>
+				<RouterProvider router={router} />;
+			</QueryClientProvider>
+		</WagmiProvider>
+	);
 };
 
 export default App;
