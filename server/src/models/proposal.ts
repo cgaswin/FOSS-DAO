@@ -1,6 +1,7 @@
 import mongoose, { Document } from "mongoose";
 
 export interface IProposal extends Document {
+	proposalId: string;
 	title: string;
 	description: string;
 	projectLink: string;
@@ -15,6 +16,10 @@ export interface IProposal extends Document {
 
 const ProposalModel = new mongoose.Schema<IProposal>(
 	{
+		proposalId: {
+			type: String,
+			required: true,
+		},
 		title: {
 			type: String,
 			required: [true, "Title is required for project proposal"],
