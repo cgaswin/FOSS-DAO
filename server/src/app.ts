@@ -32,5 +32,7 @@ const limiter: RateLimitRequestHandler = rateLimit({
 
 app.use("/api", limiter);
 
+import proposalRouter from "./routes/proposal.route.js";
+app.use("/api/v1/", proposalRouter);
 
 export default app;
