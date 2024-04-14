@@ -21,14 +21,20 @@ export const createProposal = async (
 	res: Response,
 	next: NextFunction
 ) => {
-	try {
+    try {
+        const proposalOwner = req.cookies.walletAddress;
+				if (!proposalOwner) {
+					throw new ApiError(400, "Proposal owner is required");
+				}
 		const parsedInput = proposalSchema.safeParse(req.body);
 		if (!parsedInput.success) {
 			throw new ApiError(400, parsedInput.error.message);
 		}
 		const { id, title, description, projectLink, requiredFund } =
-			parsedInput.data;
-		const proposal = await Proposal.create({
+            parsedInput.data;
+        
+        const proposal = await Proposal.create({
+            proposalOwner,
 			proposalId: id,
 			title,
 			description,
@@ -46,7 +52,11 @@ export const getAllProposals = async (
 	res: Response,
 	next: NextFunction
 ) => {
-	try {
+    try {
+        const Owner = req.cookies.walletAddress;
+				if (!Owner) {
+					throw new ApiError(400, "Proposal owner is required");
+				}
 		const proposals = await Proposal.find();
 		res.status(200).json(proposals);
 	} catch (error) {
@@ -59,7 +69,11 @@ export const voteProposal = async (
 	res: Response,
 	next: NextFunction
 ) => {
-	try {
+    try {
+        const Owner = req.cookies.walletAddress;
+				if (!Owner) {
+					throw new ApiError(400, "Proposal owner is required");
+				}
 		const parsedInput = voteSchema.safeParse(req.body);
 		if (!parsedInput.success) {
 			throw new ApiError(400, parsedInput.error.message);
@@ -97,7 +111,11 @@ export const getProposalById = async (
 	res: Response,
 	next: NextFunction
 ) => {
-	try {
+    try {
+        const Owner = req.cookies.walletAddress;
+				if (!Owner) {
+					throw new ApiError(400, "Proposal owner is required");
+				}
 		const proposal = await Proposal.findOne({ proposalId: req.params.id });
 		if (!proposal) {
 			throw new ApiError(404, "Proposal not found");
