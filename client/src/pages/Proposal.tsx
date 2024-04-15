@@ -1,14 +1,15 @@
 import DashboardTopNav from "@/components/DashboardTopNav";
 import Sidebar from "@/components/Sidebar";
 import { Button } from "@/components/ui/button";
-
 import { useState } from "react";
+import axios from "../api/axios.js";
 
 const Proposal = () => {
+	const proposalId = window.location.pathname.split("/")[3];
 	const [formData, setFormData] = useState({
+		id: proposalId,
 		title: "",
 		description: "",
-		image: null,
 		projectLink: "",
 		requiredFund: 0,
 	});
@@ -17,10 +18,13 @@ const Proposal = () => {
 		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
 	) => {
 		const { name, value } = e.target;
-		setFormData((prevState) => ({ ...prevState, [name]: value }));
+		setFormData((prevState) => ({
+			...prevState,
+			[name]: name === "requiredFund" ? Number(value) : value,
+		}));
 	};
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (isNaN(formData.requiredFund) || formData.requiredFund < 0) {
 			alert("Required fund must be a positive number");
@@ -28,6 +32,8 @@ const Proposal = () => {
 		}
 
 		console.log(formData);
+		const { data } = await axios.post("/", formData);
+		console.log(data);
 	};
 	return (
 		<div className="h-screen overflow-hidden">
@@ -119,7 +125,7 @@ const Proposal = () => {
 											<div className="mt-2">
 												<div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
 													<input
-														type="text"
+														type="number"
 														name="requiredFund"
 														value={formData.requiredFund}
 														onChange={handleChange}

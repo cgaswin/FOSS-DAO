@@ -15,6 +15,7 @@ import ProposalDetail from "./pages/ProposalDetail";
 import NewThread from "./pages/NewThread";
 import Thread from "./pages/Thread";
 import Deposit from "./pages/Deposit";
+import MyProposals from "./pages/MyProposals";
 
 const router = createBrowserRouter([
 	{
@@ -31,8 +32,12 @@ const router = createBrowserRouter([
 		element: <Profile />,
 	},
 	{
-		path: "/proposal/create",
+		path: "/proposal/create/:proposalId",
 		element: <Proposal />,
+	},
+	{
+		path: "/myproposals",
+		element: <MyProposals />,
 	},
 	{
 		path: "/proposal/:proposalId",
@@ -47,7 +52,7 @@ const router = createBrowserRouter([
 		element: <Forum />,
 	},
 	{
-		path: "/thread/create",
+		path: "/thread/create/:id",
 		element: <NewThread />,
 	},
 	{

@@ -10,10 +10,7 @@ const threadSchema = z.object({
 });
 
 const commentSchema = z.object({
-	comment: z.object({
-		username: z.string(),
-		commentMessage: z.string(),
-	}),
+	commentMessage: z.string(),
 });
 
 const voteSchema = z.object({
@@ -102,15 +99,15 @@ export const addComment = async (
 		if (!parsedInput.success) {
 			throw new ApiError(400, parsedInput.error.message);
 		}
-		const { username, commentMessage } = parsedInput.data.comment;
+		const { commentMessage } = parsedInput.data;
 		const thread_id = req.params.thread_id;
 		const foundThread = await Thread.findOne({ thread_id });
 		if (!foundThread) {
 			throw new ApiError(404, "Thread not found");
 		}
-		foundThread.comments.push({ username, commentMessage });
+		foundThread.comments.push({ username: Owner, commentMessage });
 		await foundThread.save();
-		res.status(200).json(foundThread);
+		res.status(200).json({success:true, message:"Comment added successfully",foundThread});
 	} catch (error) {
 		next(error);
 	}
@@ -132,11 +129,18 @@ export const voteThread = async (
 			throw new ApiError(400, parsedInput.error.message);
 		}
 		const { id: thread_id, vote } = parsedInput.data;
+
 		const thread = await Thread.findOne({ thread_id });
 
 		if (!thread) {
 			throw new ApiError(404, "Thread not found");
 		}
+
+		
+		if (thread.reactedUsers?.includes(Owner)) {
+			throw new ApiError(400, "You have already reacted to this thread");
+		}
+
 
 		if (vote === "up") {
 			thread.upvote += 1;
@@ -145,6 +149,7 @@ export const voteThread = async (
 		} else {
 			throw new ApiError(400, "Invalid vote type");
 		}
+		thread.reactedUsers.push(Owner);
 		await thread.save();
 		res.status(200).json(thread);
 	} catch (error) {

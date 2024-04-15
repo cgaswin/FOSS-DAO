@@ -38,6 +38,8 @@ import proposalRouter from "./routes/proposal.route.js";
 import userRouter from "./routes/user.route.js";
 import threadRouter from "./routes/thread.route.js";
 
+
+
 app.use("/api/v1/", proposalRouter);
 app.use("/api/v1/", userRouter);
 app.use("/api/v1/", threadRouter);

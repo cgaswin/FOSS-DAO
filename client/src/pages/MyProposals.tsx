@@ -2,10 +2,7 @@ import { useEffect, useState } from "react";
 import DashboardTopNav from "@/components/DashboardTopNav";
 import ProposalCard from "@/components/ProposalCard";
 import Sidebar from "@/components/Sidebar";
-import { PlusIcon } from "lucide-react";
 import axios from "../api/axios.js";
-import { v4 as uuidv4 } from "uuid";
-import {useNavigate} from "react-router-dom";
 
 export interface IProposal {
 	_id: string;
@@ -29,36 +26,26 @@ export interface IProposal {
 	__v: number;
 }
 
-const Dashboard = () => {
-	const navigate = useNavigate()
+const MyProposals = () => {
 	const [proposals, setProposals] = useState<Array<IProposal>>([]);
 	useEffect(() => {
+		const username = localStorage.getItem("username");
 		(async function getProposals() {
-			const { data } = await axios.get("/");
+			const { data } = await axios.get(`/owner/${username}`);
 			setProposals(data);
 			console.log(data);
 		})();
 	}, []);
-
-	function createNewProposal() {
-		const uniqueId = uuidv4();
-		console.log(uniqueId);
-		navigate(`/proposal/create/${uniqueId}`)
-	}
 
 	return (
 		<div>
 			<DashboardTopNav />
 			<div className="flex ">
 				<Sidebar />
-				<div className="flex flex-col w-full mt-4 h-[calc(100vh-4rem)]">
+				<div className="flex max-h-screen overflow-y-auto flex-col w-full mt-4 h-[calc(100vh-4rem)]">
 					<div>
 						<div className="flex justify-between ml-4 px-4 mt-2">
 							<h1 className="text-2xl ">Proposals</h1>
-							<div className="bg-blue-900 rounded-lg flex gap-2 items-center px-4 py-2">
-								<PlusIcon />
-								<button onClick={createNewProposal}>New Proposal</button>
-							</div>
 						</div>
 					</div>
 					{/* proposal cards */}
@@ -73,4 +60,4 @@ const Dashboard = () => {
 	);
 };
 
-export default Dashboard;
+export default MyProposals;

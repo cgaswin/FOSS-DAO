@@ -10,12 +10,20 @@ import {
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
+import axios from "../api/axios.js";
 
 export default function NewCommentModal() {
 	const [comment, setComment] = useState("");
 	const { id } = useParams();
-	function handleSubmit() {
-		console.log(comment, id);
+	async function handleSubmit() {
+		const { data } = await axios.post(`/thread/${id}`, {
+			commentMessage: comment,
+		});
+		console.log(data);
+		if (data.success) {
+			alert("comment added");
+			window.location.reload();
+		}
 	}
 	return (
 		<Dialog>

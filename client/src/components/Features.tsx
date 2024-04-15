@@ -4,14 +4,12 @@ export function Features() {
 	return (
 		<BentoGrid className="max-w-4xl bg-background mx-auto md:auto-rows-[20rem]">
 			{items.map((item, i) => (
-				<>
 					<BentoGridItem
 						key={i}
 						title={item.title}
 						description={item.description}
 						className={item.className}
 					/>
-				</>
 			))}
 		</BentoGrid>
 	);

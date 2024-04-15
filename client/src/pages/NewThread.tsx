@@ -4,9 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
+import { useParams,useNavigate } from "react-router-dom";
+import axios from "../api/axios.js";
 
 const NewThread = () => {
-	const [thread, setThread] = useState({ title: "", content: "" });
+	const [thread, setThread] = useState({ title: "", message: "" });
+	const { id } = useParams()
+	const navigate = useNavigate()
 
 	const handleChange = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -15,8 +19,15 @@ const NewThread = () => {
 		setThread((prevFormData) => ({ ...prevFormData, [name]: value }));
 	};
 
-	const submitThread = () => {
-		console.log(thread);
+	const submitThread = async() => {
+
+		const { data } = await axios.post(`/thread`, {thread_id:id,...thread});
+		console.log(data);
+		if(data.success){
+			alert("Thread added");
+			navigate("/forum")
+		}
+		
 	};
 
 	return (
@@ -34,9 +45,9 @@ const NewThread = () => {
 							placeholder="Enter Title"
 						/>
 						<Textarea
-							name="content"
+							name="message"
 							onChange={handleChange}
-							value={thread.content}
+							value={thread.message}
 							placeholder="Type your Content here."
 						/>
 						<Button

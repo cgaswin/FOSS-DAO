@@ -37,7 +37,7 @@ const ProposalModel = new mongoose.Schema<IProposal>(
 		description: {
 			type: String,
 			required: [true, "Description is required for project proposal"],
-			MaxLength: [200, "name should be under 40 characters"],
+			MaxLength: [800, "name should be under 40 characters"],
 		},
 		projectLink: {
 			type: String,
@@ -83,7 +83,7 @@ const ProposalModel = new mongoose.Schema<IProposal>(
 		endDate: {
 			type: Date,
 			default: function () {
-				return new Date(Date.now() + 3 * 60 * 1000); // 3 minutes from start date
+				return new Date(Date.now() + 20 * 60 * 1000); // 20 minutes from start date
 			},
 		},
 	},
