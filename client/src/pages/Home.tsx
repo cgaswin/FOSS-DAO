@@ -1,10 +1,31 @@
+import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import LandingImage from "../assets/landingImage.png";
 import { Features } from "@/components/Features";
+import { useAccount } from "wagmi";
+import GithubWalletModal from "@/components/GithubWalletModal";
 const Home = () => {
+	const [walletAddress, setWalletAddress] = useState<string|undefined>(undefined);
+	const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+	const { address } = useAccount();
+
+	useEffect(() => {
+		if (address) {
+			setWalletAddress(address);
+		}
+	}, [address]);
+
+	useEffect(() => {
+		if (walletAddress) {
+			setIsModalOpen(true);
+		}
+	}, [walletAddress]);
+
 	return (
 		<div>
 			<Navbar />
+			{isModalOpen && <GithubWalletModal />}
 			<div
 				id="home"
 				className="mt-12 relative flex flex-col items-center gap-8"
@@ -29,7 +50,6 @@ const Home = () => {
 					/>
 				</div>
 			</div>
-
 			{/* About section  */}
 			<div
 				id="about"
@@ -49,13 +69,11 @@ const Home = () => {
 					together, we can build a more equitable and sustainable digital world.
 				</p>
 			</div>
-
 			{/* Features  */}
 			<div id="features" className="text-center mt-24">
 				<h1 className="text-3xl mb-4">Features</h1>
 				<Features />
 			</div>
-
 			{/* Footer  */}
 			<div className="bg-cyan-950 mt-5 py-5 text-center">
 				<p>&copy; FOSSDAO</p>

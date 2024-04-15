@@ -5,7 +5,6 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
-import MetamaskImage from "../assets/metamask.png";
 import { useWeb3Modal } from "@web3modal/wagmi/react";
 
 export default function WalletModal() {
