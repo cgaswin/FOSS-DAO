@@ -198,3 +198,61 @@ export const getProposalsByOwner = async (
 		next(error);
 	}
 };
+
+
+export const verifyProposal = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	try {
+		const Owner = req.cookies.username;
+		if (!Owner) {
+			throw new ApiError(400, "owner is required");
+		}
+
+		const proposalId = req.body.proposalId
+
+		const proposal = await Proposal.findOne({ proposalId });
+
+		if (!proposal) {
+			throw new ApiError(404, "Proposal not found");
+		}
+
+		if (new Date() < proposal.endDate) {
+			throw new ApiError(400, "Voting is still open for this proposal");
+		}
+
+		if (proposal.upVote - proposal.downVote >= 1) {
+			proposal.isAccepted = true;
+		}
+		proposal.isVerified = true;
+		await proposal.save();
+		res.status(200).json(proposal);
+	} catch (error) {
+		next(error);
+	}
+};
+
+
+//write a controller to find all the proposals whose end Date have passed and isVerified is false
+
+export const findUnverifiedProposals = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	try {
+		const Owner = req.cookies.username;
+		if (!Owner) {
+			throw new ApiError(400, "owner is required");
+		}
+		const proposals = await Proposal.find({
+			endDate: { $lt: new Date() },
+			isVerified: false,
+		});
+		res.status(200).json(proposals);
+	} catch (error) {
+		next(error);
+	}
+};

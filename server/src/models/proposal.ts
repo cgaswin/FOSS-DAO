@@ -11,6 +11,7 @@ export interface IProposal extends Document {
 	downVote: number;
 	totalVotes: number;
 	isAccepted: boolean;
+	isVerified: boolean;
 	isFundSent: boolean;
 	votedUsers: string[];
 	startDate: Date;
@@ -60,6 +61,10 @@ const ProposalModel = new mongoose.Schema<IProposal>(
 			default: 0,
 		},
 		isAccepted: {
+			type: Boolean,
+			default: false,
+		},
+		isVerified: {
 			type: Boolean,
 			default: false,
 		},
