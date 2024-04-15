@@ -23,6 +23,8 @@ app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(morgan("dev"));
 app.use(cookieParser());
 
+
+
 const limiter: RateLimitRequestHandler = rateLimit({
 	windowMs: 15 * 60 * 1000, //15 mins
 	limit: 100,
@@ -33,6 +35,9 @@ const limiter: RateLimitRequestHandler = rateLimit({
 app.use("/api", limiter);
 
 import proposalRouter from "./routes/proposal.route.js";
+import userRouter from "./routes/user.route.js";
+
 app.use("/api/v1/", proposalRouter);
+app.use("/api/v1/", userRouter);
 
 export default app;

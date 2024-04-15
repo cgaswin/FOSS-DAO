@@ -22,7 +22,8 @@ export const createProposal = async (
 	next: NextFunction
 ) => {
 	try {
-		const proposalOwner = req.cookies.walletAddress;
+		const proposalOwner = req.cookies.username;
+
 		if (!proposalOwner) {
 			throw new ApiError(400, "Proposal owner is required");
 		}
@@ -47,33 +48,41 @@ export const createProposal = async (
 	}
 };
 
-export const getAllProposals = async (
+export const getAllUnvotedProposals = async (
 	req: Request,
 	res: Response,
 	next: NextFunction
 ) => {
 	try {
-		const Owner = req.cookies.walletAddress;
+		const Owner = req.cookies.username;
 		if (!Owner) {
-			throw new ApiError(400, "Proposal owner is required");
+			throw new ApiError(400, "owner username is required");
 		}
+
 		const proposals = await Proposal.find();
-		res.status(200).json(proposals);
+
+		const filteredProposals = proposals.filter((proposal) => {
+			return (
+				!proposal.votedUsers?.includes(Owner) && new Date() < proposal.endDate
+			);
+		});
+
+		res.status(200).json(filteredProposals);
 	} catch (error) {
 		next(error);
 	}
 };
-
 export const voteProposal = async (
 	req: Request,
 	res: Response,
 	next: NextFunction
 ) => {
 	try {
-		const Owner = req.cookies.walletAddress;
+		const Owner = req.cookies.username;
 		if (!Owner) {
-			throw new ApiError(400, "Proposal owner is required");
+			throw new ApiError(400, "owner is required");
 		}
+
 		const parsedInput = voteSchema.safeParse(req.body);
 		if (!parsedInput.success) {
 			throw new ApiError(400, parsedInput.error.message);
@@ -89,15 +98,19 @@ export const voteProposal = async (
 			throw new ApiError(400, "Voting is closed for this proposal");
 		}
 
+		const alreadyVoted = proposal.votedUsers?.includes(Owner);
+		if (alreadyVoted) {
+			throw new ApiError(400, "You have already voted for this proposal");
+		}
+
 		if (vote === "up") {
 			proposal.upVote += 1;
-			proposal.totalVotes += 1;
 		} else if (vote === "down") {
 			proposal.downVote += 1;
-			proposal.totalVotes += 1;
 		} else {
 			throw new ApiError(400, "Invalid vote type");
 		}
+		proposal.votedUsers?.push(Owner);
 		proposal.totalVotes += 1;
 		await proposal.save();
 		res.status(200).json(proposal);
@@ -112,9 +125,9 @@ export const getProposalById = async (
 	next: NextFunction
 ) => {
 	try {
-		const Owner = req.cookies.walletAddress;
+		const Owner = req.cookies.username;
 		if (!Owner) {
-			throw new ApiError(400, "Proposal owner is required");
+			throw new ApiError(400, "owner is required");
 		}
 		const proposal = await Proposal.findOne({ proposalId: req.params.id });
 		if (!proposal) {
@@ -132,13 +145,30 @@ export const getOverview = async (
 	next: NextFunction
 ) => {
 	try {
+		const Owner = req.cookies.username;
+		if (!Owner) {
+			throw new ApiError(400, "owner is required");
+		}
 		const totalProposals = await Proposal.countDocuments();
 		const acceptedProposals = await Proposal.countDocuments({
 			isAccepted: true,
 		});
-
+		
+		//in total fund sent , only calculate funds where isFundSent is true
 		const totalFundSent = await Proposal.aggregate([
-			{ $group: { _id: null, total: { $sum: "$requiredFund" } } },
+			{
+				$match: {
+					isFundSent: true,
+				},
+			},
+			{
+				$group: {
+					_id: null,
+					total: {
+						$sum: "$requiredFund",
+					},
+				},
+			},
 		]);
 		const stats = {
 			totalProposals,
@@ -147,6 +177,23 @@ export const getOverview = async (
 		};
 
 		res.status(200).json(stats);
+	} catch (error) {
+		next(error);
+	}
+};
+
+export const getProposalsByOwner = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	try {
+		const Owner = req.cookies.username;
+		if (!Owner) {
+			throw new ApiError(400, "owner is required");
+		}
+		const proposals = await Proposal.find({ proposalOwner: Owner });
+		res.status(200).json(proposals);
 	} catch (error) {
 		next(error);
 	}

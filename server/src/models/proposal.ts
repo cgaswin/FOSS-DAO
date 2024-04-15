@@ -1,7 +1,7 @@
 import mongoose, { Document } from "mongoose";
 
 export interface IProposal extends Document {
-	proposalOwner:string
+	proposalOwner: string;
 	proposalId: string;
 	title: string;
 	description: string;
@@ -11,6 +11,8 @@ export interface IProposal extends Document {
 	downVote: number;
 	totalVotes: number;
 	isAccepted: boolean;
+	isFundSent: boolean;
+	votedUsers: string[];
 	startDate: Date;
 	endDate: Date;
 }
@@ -19,11 +21,12 @@ const ProposalModel = new mongoose.Schema<IProposal>(
 	{
 		proposalOwner: {
 			type: String,
-			required: [true,"Proposal owner is required"]
+			required: [true, "Proposal owner is required"],
 		},
 		proposalId: {
 			type: String,
 			required: true,
+			unique: true,
 		},
 		title: {
 			type: String,
@@ -59,6 +62,14 @@ const ProposalModel = new mongoose.Schema<IProposal>(
 		isAccepted: {
 			type: Boolean,
 			default: false,
+		},
+		isFundSent: {
+			type: Boolean,
+			default: false,
+		},
+		votedUsers: {
+			type: [String],
+			default: [],
 		},
 		startDate: {
 			type: Date,

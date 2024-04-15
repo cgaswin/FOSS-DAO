@@ -7,6 +7,7 @@ export class ApiError extends Error {
 		super(message);
 		this.status = "error";
 		this.code = code;
+		this.message = message; 
 		if (stack) {
 			this.stack = stack;
 		} else {
