@@ -17,6 +17,7 @@ const Proposal = () => {
 	});
 
 	const daoBalance = localStorage.getItem("daoBalance");
+	
 
 	const handleChange = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

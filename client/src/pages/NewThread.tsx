@@ -4,13 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import { useParams,useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "../api/axios.js";
 
 const NewThread = () => {
 	const [thread, setThread] = useState({ title: "", message: "" });
-	const { id } = useParams()
-	const navigate = useNavigate()
+	const { id } = useParams();
+	const navigate = useNavigate();
 
 	const handleChange = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -19,15 +19,13 @@ const NewThread = () => {
 		setThread((prevFormData) => ({ ...prevFormData, [name]: value }));
 	};
 
-	const submitThread = async() => {
-
-		const { data } = await axios.post(`/thread`, {thread_id:id,...thread});
+	const submitThread = async () => {
+		const { data } = await axios.post(`/thread`, { thread_id: id, ...thread });
 		console.log(data);
-		if(data.success){
+		if (data.success) {
 			alert("Thread added");
-			navigate("/forum")
+			navigate("/forum");
 		}
-		
 	};
 
 	return (

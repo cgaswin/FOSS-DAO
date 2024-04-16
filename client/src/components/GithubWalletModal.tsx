@@ -2,7 +2,6 @@ import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
 import GitHubOAuth from "./GithubOAuth";
 
 export default function GithubWalletModal() {
-	console.log("hii");
 	return (
 		<Dialog defaultOpen={true}>
 			<DialogContent>

@@ -11,7 +11,6 @@ interface IUserData {
 }
 
 const GitHubOAuth = () => {
-	console.log("hello");
 	const [userData, setUserData] = useState<IUserData | null>(null);
 	const handleGitHubCallback = useCallback(() => {
 		const queryString = window.location.search;
@@ -21,7 +20,7 @@ const GitHubOAuth = () => {
 
 		async function getAccessToken() {
 			await fetch(
-				`http://localhost:8000/api/v1/access-token?code=${codeParam}`,
+				`https://foss-dao-production.up.railway.app/api/v1/access-token?code=${codeParam}`,
 				{
 					method: "GET",
 					headers: {
@@ -41,7 +40,7 @@ const GitHubOAuth = () => {
 		}
 
 		async function getUserData() {
-			await fetch("http://localhost:8000/api/v1/github", {
+			await fetch("https://foss-dao-production.up.railway.app/api/v1/github", {
 				method: "GET",
 				headers: {
 					Authorization: `Bearer ${localStorage.getItem("accessToken")}`,

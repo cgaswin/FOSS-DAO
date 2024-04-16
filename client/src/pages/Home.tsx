@@ -16,6 +16,7 @@ const Home = () => {
 		if (address) {
 			console.log(address)
 			localStorage.setItem("walletAddress", address);
+			document.cookie = `walletAddress=${address}; path=/`;
 			if (localStorage.getItem("username") === null) {
 				setIsModalOpen(true);
 			} else {
