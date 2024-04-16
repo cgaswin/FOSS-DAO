@@ -239,7 +239,7 @@ export const verifyProposal = async (
 				proposal.isFundSent = true;
 			}
 			await proposal.save();
-			res.status(200).json(proposal);
+			res.status(201).json(proposal);
 		}
 	} catch (error) {
 		next(error);
