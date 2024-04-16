@@ -27,7 +27,7 @@ app.use(cookieParser());
 
 const limiter: RateLimitRequestHandler = rateLimit({
 	windowMs: 15 * 60 * 1000, //15 mins
-	limit: 100,
+	limit: 1000,
 	legacyHeaders: false,
 	message: "Too many requests from this ip, please try after 15 mins",
 });

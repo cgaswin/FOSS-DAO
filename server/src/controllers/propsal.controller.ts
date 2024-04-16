@@ -2,6 +2,7 @@ import Proposal, { IProposal } from "../models/proposal.js";
 import { ApiError } from "../utils/ApiError.js";
 import { Request, Response, NextFunction } from "express";
 import { z } from "zod";
+import { sendToken } from "../utils/sendToken.js";
 
 const proposalSchema = z.object({
 	id: z.string().uuid(),
@@ -23,10 +24,20 @@ export const createProposal = async (
 ) => {
 	try {
 		const proposalOwner = req.cookies.username;
+		const ownerWallet = req.cookies.walletAddress;
+		const avatarUrl = req.cookies.avatarUrl;
+		console.log(avatarUrl);
 
 		if (!proposalOwner) {
 			throw new ApiError(400, "Proposal owner is required");
 		}
+		if (!ownerWallet) {
+			throw new ApiError(400, "owner wallet address is required");
+		}
+		if (!avatarUrl) {
+			throw new ApiError(400, "avatar url is required");
+		}
+
 		const parsedInput = proposalSchema.safeParse(req.body);
 		if (!parsedInput.success) {
 			throw new ApiError(400, parsedInput.error.message);
@@ -36,7 +47,9 @@ export const createProposal = async (
 
 		const proposal = await Proposal.create({
 			proposalOwner,
+			ownerWallet,
 			proposalId: id,
+			avatarUrl,
 			title,
 			description,
 			projectLink,
@@ -145,7 +158,6 @@ export const getOverview = async (
 	next: NextFunction
 ) => {
 	try {
-
 		const Owner = req.cookies.username;
 		if (!Owner) {
 			throw new ApiError(400, "owner is required");
@@ -154,8 +166,7 @@ export const getOverview = async (
 		const acceptedProposals = await Proposal.countDocuments({
 			isAccepted: true,
 		});
-		
-		//in total fund sent , only calculate funds where isFundSent is true
+
 		const totalFundSent = await Proposal.aggregate([
 			{
 				$match: {
@@ -200,60 +211,38 @@ export const getProposalsByOwner = async (
 	}
 };
 
-
 export const verifyProposal = async (
 	req: Request,
 	res: Response,
 	next: NextFunction
 ) => {
 	try {
-		const Owner = req.cookies.username;
-		if (!Owner) {
-			throw new ApiError(400, "owner is required");
-		}
-
-		const proposalId = req.body.proposalId
-
-		const proposal = await Proposal.findOne({ proposalId });
-
-		if (!proposal) {
-			throw new ApiError(404, "Proposal not found");
-		}
-
-		if (new Date() < proposal.endDate) {
-			throw new ApiError(400, "Voting is still open for this proposal");
-		}
-
-		if (proposal.upVote - proposal.downVote >= 1) {
-			proposal.isAccepted = true;
-		}
-		proposal.isVerified = true;
-		await proposal.save();
-		res.status(200).json(proposal);
-	} catch (error) {
-		next(error);
-	}
-};
-
-
-//write a controller to find all the proposals whose end Date have passed and isVerified is false
-
-export const findUnverifiedProposals = async (
-	req: Request,
-	res: Response,
-	next: NextFunction
-) => {
-	try {
-		const Owner = req.cookies.username;
-		if (!Owner) {
-			throw new ApiError(400, "owner is required");
-		}
 		const proposals = await Proposal.find({
 			endDate: { $lt: new Date() },
 			isVerified: false,
 		});
-		res.status(200).json(proposals);
+
+		if (proposals.length === 0) {
+			res.status(200).json({ message: "No proposals pending to be verified" });
+			return;
+		}
+		
+		for (let proposal of proposals) {
+			if (proposal.upVote - proposal.downVote >= 1) {
+				proposal.isAccepted = true;
+			}
+			const owner = proposal.ownerWallet;
+			const amount = proposal.requiredFund.toString();
+			const response = await sendToken(owner, amount);
+			if (response) {
+				proposal.isVerified = true;
+				proposal.isFundSent = true;
+			}
+			await proposal.save();
+			res.status(200).json(proposal);
+		}
 	} catch (error) {
 		next(error);
 	}
 };
+

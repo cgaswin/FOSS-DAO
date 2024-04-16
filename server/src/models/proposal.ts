@@ -2,8 +2,10 @@ import mongoose, { Document } from "mongoose";
 
 export interface IProposal extends Document {
 	proposalOwner: string;
+	ownerWallet: string;
 	proposalId: string;
 	title: string;
+	avatarUrl: string;
 	description: string;
 	projectLink: string;
 	requiredFund: number;
@@ -23,6 +25,14 @@ const ProposalModel = new mongoose.Schema<IProposal>(
 		proposalOwner: {
 			type: String,
 			required: [true, "Proposal owner is required"],
+		},
+		ownerWallet: {
+			type: String,
+			required: [true, "owner wallet address is required"],
+		},
+		avatarUrl: {
+			type: String,
+			required: [true, "avatar url is mandatory"],
 		},
 		proposalId: {
 			type: String,
@@ -83,7 +93,7 @@ const ProposalModel = new mongoose.Schema<IProposal>(
 		endDate: {
 			type: Date,
 			default: function () {
-				return new Date(Date.now() + 20 * 60 * 1000); // 20 minutes from start date
+				return new Date(Date.now() + 5 * 60 * 1000); // 20 minutes from start date
 			},
 		},
 	},

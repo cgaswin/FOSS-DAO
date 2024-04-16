@@ -25,9 +25,16 @@ export const createThread = async (
 ) => {
 	try {
 		const creator = req.cookies.username;
+		const avatarUrl = req.cookies.avatarUrl
 		if (!creator) {
 			throw new ApiError(400, "Creator of the thread is required");
 		}
+
+		if (!avatarUrl) {
+			throw new ApiError(400, "avatar url is required");
+		}
+
+
 		const parsedInput = threadSchema.safeParse(req.body);
 		if (!parsedInput.success) {
 			throw new ApiError(400, parsedInput.error.message);
@@ -37,11 +44,12 @@ export const createThread = async (
 
 		const newThread = await Thread.create({
 			creator,
+			avatarUrl,
 			thread_id: parsedInput.data.thread_id,
 			title,
 			message,
 		});
-		res.status(201).json(newThread);
+		res.status(201).json({newThread,success:true, message:"Thread created successfully"});
 	} catch (error) {
 		next(error);
 	}

@@ -4,6 +4,7 @@ import mongoose, { Document } from "mongoose";
 export interface IThread extends Document {
 	thread_id: string;
 	creator: string;
+	avatarUrl: string;
 	title: string;
 	message: string;
 	upvote: number;
@@ -18,6 +19,9 @@ const ThreadModel = new mongoose.Schema<IThread>(
 			type: String,
 			required: [true, "Thread ID is required"],
 			unique: true,
+		},
+		avatarUrl: {
+			type:String
 		},
 		creator: {
 			type: String,

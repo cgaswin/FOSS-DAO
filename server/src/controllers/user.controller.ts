@@ -6,6 +6,7 @@ import { z } from "zod";
 const userSchema = z.object({
 	username: z.string(),
 	walletAddress: z.string(),
+	avatarUrl:z.string()
 });
 
 export const createUser = async (
@@ -18,11 +19,12 @@ export const createUser = async (
 		if (!parsedInput.success) {
 			throw new ApiError(400, parsedInput.error.message);
 		}
-		const { username, walletAddress } = parsedInput.data;
+		const { username, walletAddress, avatarUrl } = parsedInput.data;
 
 		const newUser = await user.create({
 			username,
 			walletAddress,
+			avatarUrl
 		});
 		res.status(201).json(newUser);
 	} catch (error) {
