@@ -11,6 +11,7 @@ interface IUserData {
 }
 
 const GitHubOAuth = () => {
+	console.log("hello");
 	const [userData, setUserData] = useState<IUserData | null>(null);
 	const handleGitHubCallback = useCallback(() => {
 		const queryString = window.location.search;
@@ -25,7 +26,6 @@ const GitHubOAuth = () => {
 					method: "GET",
 					headers: {
 						Accept: "application/json",
-					
 					},
 				}
 			)
@@ -55,11 +55,13 @@ const GitHubOAuth = () => {
 					setUserData(data);
 					if (userData?.login) {
 						localStorage.setItem("username", userData?.login);
+
 						//also set the cookie with the value username
 						document.cookie = `username=${userData?.login}; path=/`;
 					}
-					if(userData?.avatar_url){
-						localStorage.setItem("avatar_url", userData?.avatar_url);
+					if (userData?.avatar_url) {
+						localStorage.setItem("avatarUrl", userData?.avatar_url);
+						document.cookie = `avatarUrl=${userData?.avatar_url}; path=/`;
 					}
 				});
 		}

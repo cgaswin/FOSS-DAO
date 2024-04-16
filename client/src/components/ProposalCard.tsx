@@ -2,16 +2,25 @@ import AvatarIcon from "../assets/Avatar.png";
 import { ProgressNegative } from "./ProgressNegative";
 import { IProposal } from "../pages/Dashboard.js";
 import { ProgressPositive } from "./ProgressPositive";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const ProposalCard = ({ proposal }: { proposal: IProposal }) => {
 	const navigate = useNavigate();
-	const { title, proposalOwner, description, endDate, upVote, downVote } =
-		proposal;
+	const {
+		title,
+		proposalOwner,
+		description,
+		endDate,
+		upVote,
+		downVote,
+		votedUsers,
+	} = proposal;
 	//find the time in minutes
 	const timeDifference = Math.floor(
 		(new Date(endDate).getTime() - new Date().getTime()) / 60000
 	);
+
+	const username = localStorage.getItem("username");
 
 	let upVotePercentage = 0;
 	let downVotePercentage = 0;
@@ -20,13 +29,19 @@ const ProposalCard = ({ proposal }: { proposal: IProposal }) => {
 		downVotePercentage = (downVote / (upVote + downVote)) * 100;
 	}
 	const showProposal = () => {
+		if (username) {
+			if (votedUsers.includes(username)) {
+				alert("you have already voted");
+				return;
+			}
+		}
 		navigate(`/proposal/${proposal.proposalId}`);
 	};
 
 	return (
 		<div
 			onClick={showProposal}
-			className="bg-blue-900 w-full rounded-md px-4 py-2 h-full"
+			className="bg-blue-900 w-full hover:cursor-pointer rounded-md px-4 py-2 h-full"
 		>
 			<div className="flex gap-2 items-center">
 				<img src={AvatarIcon} className="h-8" />

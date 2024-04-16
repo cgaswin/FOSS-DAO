@@ -36,13 +36,11 @@ const Dashboard = () => {
 		(async function getProposals() {
 			const { data } = await axios.get("/");
 			setProposals(data);
-			console.log(data);
 		})();
 	}, []);
 
 	function createNewProposal() {
 		const uniqueId = uuidv4();
-		console.log(uniqueId);
 		navigate(`/proposal/create/${uniqueId}`)
 	}
 

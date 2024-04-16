@@ -6,7 +6,7 @@ import axios from "../api/axios.js";
 import { useNavigate } from "react-router-dom";
 
 const Proposal = () => {
-	const navigate = useNavigate()
+	const navigate = useNavigate();
 	const proposalId = window.location.pathname.split("/")[3];
 	const [formData, setFormData] = useState({
 		id: proposalId,
@@ -15,6 +15,8 @@ const Proposal = () => {
 		projectLink: "",
 		requiredFund: 0,
 	});
+
+	const daoBalance = localStorage.getItem("daoBalance");
 
 	const handleChange = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -32,13 +34,17 @@ const Proposal = () => {
 			alert("Required fund must be a positive number");
 			return;
 		}
+		
+		if (formData.requiredFund > Number(daoBalance)) {
+			alert("Required fund should be less than DAO balance");
+			return;
+		}
 
-		console.log(formData);
 		const { data } = await axios.post("/", formData);
 		console.log(data);
-		if(data){
-			alert("proposal created")
-			navigate("/dashboard")
+		if (data) {
+			alert("proposal created");
+			navigate("/dashboard");
 		}
 	};
 	return (
@@ -94,7 +100,6 @@ const Proposal = () => {
 													rows={3}
 													placeholder="Enter description of the project"
 													className="block bg-blue-950 px-4  w-full rounded-md border-0 py-1.5 text-white shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-													defaultValue={""}
 												/>
 											</div>
 										</div>

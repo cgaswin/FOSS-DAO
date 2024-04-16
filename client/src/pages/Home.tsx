@@ -4,15 +4,17 @@ import LandingImage from "../assets/landingImage.png";
 import { Features } from "@/components/Features";
 import { useAccount } from "wagmi";
 import GithubWalletModal from "@/components/GithubWalletModal";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 const Home = () => {
 	const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 	const navigate = useNavigate();
 
 	const { address } = useAccount();
+	console.log(address);
 
 	useEffect(() => {
 		if (address) {
+			console.log(address)
 			localStorage.setItem("walletAddress", address);
 			if (localStorage.getItem("username") === null) {
 				setIsModalOpen(true);
@@ -20,10 +22,8 @@ const Home = () => {
 				setIsModalOpen(false);
 				navigate("/dashboard");
 			}
-
 		}
-	}, [address,navigate]);
-
+	}, [address, navigate]);
 
 	return (
 		<div>

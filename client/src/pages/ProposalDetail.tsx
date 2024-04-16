@@ -8,15 +8,17 @@ import { useParams } from "react-router-dom";
 import axios from "../api/axios.js";
 import { IProposal } from "./Dashboard.js";
 import { Button } from "@/components/ui/button.js";
+import {useNavigate} from "react-router-dom"
 
 const Forum = () => {
 	const { proposalId } = useParams();
-	console.log(proposalId);
+	
+
+	const navigate = useNavigate()
 
 	const [proposal, setProposal] = useState<IProposal>({} as IProposal);
 	const [isActive, setIsActive] = useState<boolean>(false);
 	const [userVote, setUserVote] = useState<string | null>(null);
-	const [render, setRender] = useState<boolean>(false);
 
 	const handleVoteChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setUserVote(event.target.value);
@@ -47,7 +49,6 @@ const Forum = () => {
 	useEffect(() => {
 		(async function getProposal() {
 			const { data } = await axios.get(`/proposal/${proposalId}`);
-			console.log(data);
 			setProposal(data);
 		})();
 	}, [proposalId]);
@@ -80,8 +81,11 @@ const Forum = () => {
 			vote: userVote,
 		});
 
+
 		if (data) {
-			setRender(!render);
+			alert("voting successfull")
+			navigate("/dashboard")
+			
 		}
 	}
 

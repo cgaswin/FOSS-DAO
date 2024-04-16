@@ -12,12 +12,12 @@ const Sidebar = () => {
 	const { disconnect } = useDisconnect();
 
 	function handleLogout() {
+		disconnect();
 		localStorage.clear();
 		document.cookie =
 			"username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 		document.cookie =
-			"avatar_url=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-		disconnect();
+			"avatarUrl=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 		window.location.href = "/";
 	}
 
