@@ -15,6 +15,13 @@ const Forum = () => {
 
 	const [proposal, setProposal] = useState<IProposal>({} as IProposal);
 	const [isActive, setIsActive] = useState<boolean>(false);
+	const [userVote, setUserVote] = useState<string | null>(null);
+	const [render, setRender] = useState<boolean>(false);
+
+	const handleVoteChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setUserVote(event.target.value);
+	};
+
 	let color = "";
 	if (isActive) {
 		color = "green";
@@ -22,9 +29,11 @@ const Forum = () => {
 		color = "red";
 	}
 
-	if (new Date(proposal.endDate) > new Date()) {
-		setIsActive(true);
-	}
+	useEffect(() => {
+		if (new Date(proposal.endDate) > new Date()) {
+			setIsActive(true);
+		}
+	}, [proposal.endDate]);
 
 	let upVotePercentage = 0;
 	let downVotePercentage = 0;
@@ -65,6 +74,17 @@ const Forum = () => {
 		window.open(url, "_blank");
 	}
 
+	async function handleSubmit() {
+		const { data } = await axios.post("/vote", {
+			id: proposalId,
+			vote: userVote,
+		});
+
+		if (data) {
+			setRender(!render);
+		}
+	}
+
 	return (
 		<div>
 			<DashboardTopNav />
@@ -78,7 +98,7 @@ const Forum = () => {
 								<img src={AvatarIcon} alt="Avatar Icon" />
 								<p>{proposal.proposalOwner}</p>
 								<button className={`bg-${color}-600 rounded-2xl px-3 py-1`}>
-									{isActive ? "Active" : "Inactive"}
+									{isActive ? "Active" : "Expired"}
 								</button>
 							</div>
 							<h1 className="font-bold text-xl">Required Fund:</h1>
@@ -116,13 +136,26 @@ const Forum = () => {
 								<h2 className="text-xl font-extrabold">Cast your vote</h2>
 								<div className="flex flex-col gap-2">
 									<div className="p-4 flex gap-2 border-cyan-800 rounded-md pr-96 border-2">
-										<input type="radio" />
+										<input
+											name="vote"
+											value="up"
+											checked={userVote === "up"}
+											onChange={handleVoteChange}
+											type="radio"
+										/>
 										<label>Yes, Vote for</label>
 									</div>
 									<div className="p-4 flex gap-2 border-cyan-800 rounded-md border-2">
-										<input type="radio" />
+										<input
+											name="vote"
+											value="down"
+											checked={userVote === "down"}
+											onChange={handleVoteChange}
+											type="radio"
+										/>
 										<label>No, Vote Against</label>
 									</div>
+									<Button onClick={handleSubmit}>Submit</Button>
 								</div>
 							</div>
 							<div className="flex flex-col gap-4">

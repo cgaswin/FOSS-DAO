@@ -31,7 +31,8 @@
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^9.0.1",
     "viem": "~2.9.16",
-    "wagmi": "^2.5.19"
+    "wagmi": "^2.5.19",
+    "web3": "^4.7.0"
   },
   "devDependencies": {
     "@types/node": "^20.11.17",

@@ -3,8 +3,10 @@ import Sidebar from "@/components/Sidebar";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import axios from "../api/axios.js";
+import { useNavigate } from "react-router-dom";
 
 const Proposal = () => {
+	const navigate = useNavigate()
 	const proposalId = window.location.pathname.split("/")[3];
 	const [formData, setFormData] = useState({
 		id: proposalId,
@@ -34,6 +36,10 @@ const Proposal = () => {
 		console.log(formData);
 		const { data } = await axios.post("/", formData);
 		console.log(data);
+		if(data){
+			alert("proposal created")
+			navigate("/dashboard")
+		}
 	};
 	return (
 		<div className="h-screen overflow-hidden">

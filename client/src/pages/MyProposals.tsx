@@ -50,7 +50,7 @@ const MyProposals = () => {
 					</div>
 					{/* proposal cards */}
 					<div className="mx-4 mt-2 flex flex-col gap-3">
-						{proposals.map((proposal) => (
+						{proposals.reverse().map((proposal) => (
 							<ProposalCard key={proposal._id} proposal={proposal} />
 						))}
 					</div>
