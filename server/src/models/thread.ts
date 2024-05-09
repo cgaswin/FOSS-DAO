@@ -21,7 +21,8 @@ const ThreadModel = new mongoose.Schema<IThread>(
 			unique: true,
 		},
 		avatarUrl: {
-			type:String
+			type: String,
+			default: "https://i.stack.imgur.com/frlIf.png",
 		},
 		creator: {
 			type: String,

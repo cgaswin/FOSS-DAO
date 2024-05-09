@@ -12,6 +12,8 @@ const proposalSchema = z.object({
 	requiredFund: z.number().positive(),
 });
 
+
+
 const voteSchema = z.object({
 	id: z.string().uuid(),
 	vote: z.string().regex(/^(up|down)$/),
@@ -25,17 +27,13 @@ export const createProposal = async (
 	try {
 		const proposalOwner = req.cookies.username;
 		const ownerWallet = req.cookies.walletAddress;
-		const avatarUrl = req.cookies.avatarUrl;
-		console.log(avatarUrl);
+	
 
 		if (!proposalOwner) {
 			throw new ApiError(400, "Proposal owner is required");
 		}
 		if (!ownerWallet) {
 			throw new ApiError(400, "owner wallet address is required");
-		}
-		if (!avatarUrl) {
-			throw new ApiError(400, "avatar url is required");
 		}
 
 		const parsedInput = proposalSchema.safeParse(req.body);
@@ -49,7 +47,6 @@ export const createProposal = async (
 			proposalOwner,
 			ownerWallet,
 			proposalId: id,
-			avatarUrl,
 			title,
 			description,
 			projectLink,

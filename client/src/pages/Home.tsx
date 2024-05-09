@@ -1,16 +1,87 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Navbar from "@/components/Navbar";
 import LandingImage from "../assets/landingImage.png";
 import { Features } from "@/components/Features";
 import { useAccount } from "wagmi";
 import GithubWalletModal from "@/components/GithubWalletModal";
 import { useNavigate } from "react-router-dom";
+
+interface IUserData {
+	login: string;
+	avatar_url: string;
+}
+
 const Home = () => {
 	const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 	const navigate = useNavigate();
+	
 
 	const { address } = useAccount();
 	console.log(address);
+
+	const [userData, setUserData] = useState<IUserData | null>(null);
+	const handleGitHubCallback = useCallback(() => {
+		const queryString = window.location.search;
+		const urlParams = new URLSearchParams(queryString);
+		const codeParam = urlParams.get("code");
+		console.log(codeParam);
+
+		async function getAccessToken() {
+			await fetch(
+				`http://localhost:8000/api/v1/access-token?code=${codeParam}`,
+				{
+					method: "GET",
+					headers: {
+						Accept: "application/json",
+					},
+				}
+			)
+				.then((response) => {
+					return response.json();
+				})
+				.then((data) => {
+					console.log(data);
+					if (data.access_token) {
+						localStorage.setItem("accessToken", data.access_token);
+						getUserData();
+					}
+				});
+		}
+
+		async function getUserData() {
+			const response = await fetch("http://localhost:8000/api/v1/github", {
+				method: "GET",
+				headers: {
+					Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+				},
+			});
+
+			const data = await response.json();
+			console.log(data);
+			setUserData(data);
+		}
+
+		if (codeParam && localStorage.getItem("accessToken") == null) {
+			getAccessToken();
+		}
+	});
+
+	useEffect(() => {
+		handleGitHubCallback();
+	}, [handleGitHubCallback]);
+
+	useEffect(() => {
+		console.log(userData);
+		console.log(userData?.login);
+
+		if (userData?.login) {
+			localStorage.setItem("username", userData?.login);
+			document.cookie = `username=${userData?.login}; path=/`;
+		}
+		if (userData?.avatar_url) {
+			localStorage.setItem("avatar_url", userData?.avatar_url);
+		}
+	}, [userData]);
 
 	useEffect(() => {
 		if (address) {

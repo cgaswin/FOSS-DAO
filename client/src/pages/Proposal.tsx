@@ -17,7 +17,6 @@ const Proposal = () => {
 	});
 
 	const daoBalance = localStorage.getItem("daoBalance");
-	
 
 	const handleChange = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -35,7 +34,7 @@ const Proposal = () => {
 			alert("Required fund must be a positive number");
 			return;
 		}
-		
+
 		if (formData.requiredFund > Number(daoBalance)) {
 			alert("Required fund should be less than DAO balance");
 			return;

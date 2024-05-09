@@ -32,7 +32,7 @@ const ProposalModel = new mongoose.Schema<IProposal>(
 		},
 		avatarUrl: {
 			type: String,
-			required: [true, "avatar url is mandatory"],
+			default:"https://i.stack.imgur.com/frlIf.png"
 		},
 		proposalId: {
 			type: String,

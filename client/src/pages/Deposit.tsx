@@ -3,11 +3,32 @@ import Sidebar from "@/components/Sidebar";
 import TokenLogo from "../assets/Logo.png";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useSendTransaction } from "wagmi";
+import { parseEther } from "viem";
+import { useNavigate } from "react-router-dom";
+
+const walletAddress = import.meta.env.VITE_DAO_WALLET_ADDRESS;
 
 const Deposit = () => {
-	const [depositAmount, setDepositAmount] = useState(0);
-	function handleSubmit() {
+	const { sendTransactionAsync } = useSendTransaction();
+	const navigate = useNavigate();
+	const [depositAmount, setDepositAmount] = useState("");
+	async function handleSubmit() {
 		console.log(depositAmount);
+		if (walletAddress) {
+			const result = await sendTransactionAsync({
+				to: "0xd2135CfB216b74109775236E36d4b433F1DF507B",
+				value: parseEther(depositAmount),
+			});
+			if (result) {
+				alert("Tokens Transferred");
+				navigate("/Dashboard");
+			}
+		}
+	}
+
+	function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+		setDepositAmount(event.target.value);
 	}
 	return (
 		<div>
@@ -22,9 +43,7 @@ const Deposit = () => {
 								<input
 									type="number"
 									value={depositAmount}
-									onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-										setDepositAmount(parseInt(e.target.value))
-									}
+									onChange={handleChange}
 									className="outline-none rounded-md text-black px-2"
 								/>
 								<div className="flex gap-2 p-2 items-center px-2 bg-slate-950 rounded-lg">

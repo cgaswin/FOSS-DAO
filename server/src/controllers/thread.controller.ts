@@ -30,9 +30,7 @@ export const createThread = async (
 			throw new ApiError(400, "Creator of the thread is required");
 		}
 
-		if (!avatarUrl) {
-			throw new ApiError(400, "avatar url is required");
-		}
+		
 
 
 		const parsedInput = threadSchema.safeParse(req.body);
@@ -44,7 +42,6 @@ export const createThread = async (
 
 		const newThread = await Thread.create({
 			creator,
-			avatarUrl,
 			thread_id: parsedInput.data.thread_id,
 			title,
 			message,
