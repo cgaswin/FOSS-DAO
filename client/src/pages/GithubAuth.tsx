@@ -1,17 +1,10 @@
-import { useState, useEffect, useCallback } from "react";
+import { useEffect, useCallback } from "react";
 import Navbar from "@/components/Navbar";
 import { useNavigate } from "react-router-dom";
 
-interface IUserData {
-	login: string;
-	avatar_url: string;
-}
-
 const GithubAuth = () => {
 	const navigate = useNavigate();
-	const [render,setRender] = useState<boolean>(false)
 
-	const [userData, setUserData] = useState<IUserData | null>(null);
 	const handleGitHubCallback = useCallback(() => {
 		const queryString = window.location.search;
 		const urlParams = new URLSearchParams(queryString);
@@ -74,7 +67,6 @@ const GithubAuth = () => {
 	useEffect(() => {
 		handleGitHubCallback();
 	}, [handleGitHubCallback]);
-
 
 	return (
 		<>
