@@ -14,10 +14,8 @@ const Thread = () => {
 	const { id } = useParams();
 	console.log(id);
 	const [thread, setThread] = useState<IThread>({} as IThread);
-	const [render,setRender] = useState<boolean>(false)
 	const { comments, createdAt, downvote, upvote, title, creator, message } =
 		thread;
-
 	const createdDate = new Date(createdAt);
 
 	const options = {
@@ -40,14 +38,12 @@ const Thread = () => {
 		const vote = "up";
 		const { data } = await axios.post("/thread/vote", { id, vote });
 		console.log(data);
-		setRender(!render)
 	}
 
 	async function handleDownVote() {
 		const vote = "down";
 		const { data } = await axios.post("/thread/vote", { id, vote });
 		console.log(data);
-		setRender(!render)
 	}
 
 	return (

@@ -4,13 +4,18 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "../api/axios.js";
 
+interface IThreadData{
+	title:string;
+	message:string;
+}
+
 const NewThread = () => {
-	const [thread, setThread] = useState({ title: "", message: "" });
+	const [thread, setThread] = useState<IThreadData>({ title: "", message: "" });
+	const [render,setRender] = useState<boolean>(false);
 	const { id } = useParams();
-	const navigate = useNavigate();
 
 	const handleChange = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -24,7 +29,7 @@ const NewThread = () => {
 		console.log(data);
 		if (data.success) {
 			alert("Thread added");
-			navigate("/forum");
+			setRender(!render);
 		}
 	};
 

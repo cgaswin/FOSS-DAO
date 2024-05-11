@@ -16,6 +16,7 @@ import NewThread from "./pages/NewThread";
 import Thread from "./pages/Thread";
 import Deposit from "./pages/Deposit";
 import MyProposals from "./pages/MyProposals";
+import GithubAuth from "./pages/GithubAuth";
 
 const router = createBrowserRouter([
 	{
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
 	{
 		path: "/profile",
 		element: <Profile />,
+	},
+	{
+		path: "/github-auth",
+		element:<GithubAuth/>,
 	},
 	{
 		path: "/proposal/create/:proposalId",

@@ -25,11 +25,11 @@ const items = [
 	{
 		title: " Token Payment System",
 		description:
-			"Users transact using the platform's native token, facilitating seamless project funding and voting processes while ensuring transparency and security in transactions.",
+			"Users transact using tokens, facilitating seamless project funding and voting processes while ensuring transparency and security in transactions.",
 		className: "md:col-span-1 bg-blue-950",
 	},
 	{
-		title: "Decentralized Chat Forum",
+		title: "Chat Forum",
 		description:
 			"Engage in discussions, share ideas, and collaborate with other members in the decentralized chat forum, fostering a vibrant community environment for open-source enthusiasts.",
 		className: "md:col-span-1 bg-blue-950",

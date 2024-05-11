@@ -10,7 +10,7 @@ import { IProposal } from "./Dashboard.js";
 import { Button } from "@/components/ui/button.js";
 import {useNavigate} from "react-router-dom"
 
-const Forum = () => {
+const ProposalDetail = () => {
 	const { proposalId } = useParams();
 	
 
@@ -183,4 +183,4 @@ const Forum = () => {
 	);
 };
 
-export default Forum;
+export default ProposalDetail;
